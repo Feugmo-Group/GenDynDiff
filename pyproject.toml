@@ -1,0 +1,79 @@
+[tool.poetry]
+name = "gendyndiff"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+
+
+[tool.black]
+line-length = 100
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 100
+known_first_party = [
+    "gendyndiff",
+]
+
+
+
+
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = "^1.6.1"
+
+
+
+
+[tool.poetry.dependencies]
+python = "~3.12"
+omegaconf = "^2.3.0"
+hydra-core = "^1.3.2"
+isort = "^6.0.0"
+autopep8 = "^2.3.2"
+pre-commit = "^4.1.0"
+pytest = "^8.3.4"
+black = "^25.1.0"
+wandb = "^0.19.6"
+ase = "^3.24.0"
+hydra-joblib-launcher = "^1.2.0"
+jupyterlab = "^4.3.5"
+lmdb = "^1.6.2"
+matplotlib = "^3.10.0"
+notebook = "^7.3.2"
+numpy = "^2.2.3"
+pymatgen = "^2025.2.18"
+pylint = "^3.3.4"
+tqdm = "^4.67.1"
+torch = "2.5.0"
+pytorch-lightning = "^2.5.0.post0"
+torch-scatter = {url = "https://data.pyg.org/whl/torch-2.5.0%2Bcpu/torch_scatter-2.1.2-cp312-cp312-macosx_10_13_universal2.whl"}
+pyg-lib = {url = "https://data.pyg.org/whl/torch-2.5.0%2Bcpu/pyg_lib-0.4.0+pt25-cp312-cp312-macosx_14_0_universal2.whl"}
+torch-cluster = {url = "https://data.pyg.org/whl/torch-2.5.0%2Bcpu/torch_cluster-1.6.3-cp312-cp312-macosx_10_13_universal2.whl"}
+torch-sparse = {url = "https://data.pyg.org/whl/torch-2.5.0%2Bcpu/torch_sparse-0.6.18-cp312-cp312-macosx_11_0_universal2.whl"}
+torch-spline-conv = {url = "https://data.pyg.org/whl/torch-2.5.0%2Bcpu/torch_spline_conv-1.2.2-cp312-cp312-macosx_10_13_universal2.whl"}
+torch-geometric = "^2.6.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.setuptools.packages.find]
+include = ["gendyndiff*"]
+
