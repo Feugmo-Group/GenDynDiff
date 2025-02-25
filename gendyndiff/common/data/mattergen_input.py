@@ -1,4 +1,4 @@
-#
+#How the input of the NPT file would work
 
 
 import torch
@@ -9,11 +9,11 @@ from ase.io import read
 atoms=read_lammps_dump_text(fileobj=open('../../../datasets/SrTiO3/dump.NPT'), index=-1) # reading the  last structure
 cfg = read('../../../datasets/SrTiO3/SrTiO3_supercell_555.cfg')
 
-positions = atoms.get_positions()  # Shape: (N_atoms, 3)
-velocities = atoms.get_velocities()  # Shape: (N_atoms, 3)
-atomic_numbers = atoms.numbers  # Shape: (N_atoms,)
-symbols = atoms.get_chemical_symbols()  # Shape: (N_atoms,) as strings
-lattice = atoms.cell  # Shape: (3, 3)
+positions = atoms.get_positions()
+velocities = atoms.get_velocities()
+atomic_numbers = atoms.numbers
+symbols = atoms.get_chemical_symbols()
+lattice = atoms.cell
 
 print("Positions:", positions)
 print("Velocities:", velocities)
@@ -40,4 +40,5 @@ batch_idx = {
 }
 
 batched_dataset = SimpleBatchedData(data=data, batch_idx=batch_idx)
+print("Batched Dataset (mattergen model input):")
 print(batched_dataset)
