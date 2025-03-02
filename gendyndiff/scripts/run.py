@@ -47,3 +47,5 @@ def orgomol_main(cfg: omegaconf.DictConfig):
 
 if __name__ == "__main__":
     orgomol_main()
+
+    #why isnt commit working
