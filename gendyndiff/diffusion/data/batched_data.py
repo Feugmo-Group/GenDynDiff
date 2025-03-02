@@ -186,3 +186,44 @@ def _construct_batch_idx(data_list: list[Any], field_name: str) -> torch.LongTen
         torch.arange(0, batch_size),
         torch.tensor([x[field_name].shape[0] for x in data_list]),
     )
+
+# Custom Crystal dataset class to handle dump data from molecular trajectories
+# Takes an NPT file, makes it into the mattergen format
+class CustomCrystalDataset:
+    @classmethod
+    def from_dump_file(cls, dump_file_path, cfg_file_path):
+        from ase.io.lammpsrun import read_lammps_dump_text
+        from ase.io import read
+
+        # Read atoms from dump and cfg files
+        atoms = read_lammps_dump_text(fileobj=open(dump_file_path), index=-1)
+        cfg = read(cfg_file_path)
+
+        # Extract data
+        positions = atoms.get_positions()
+        velocities = atoms.get_velocities()
+        atomic_numbers = atoms.numbers
+        lattice = atoms.cell
+
+        # Convert to tensors
+        positions_tensor = torch.tensor(positions, dtype=torch.float32)
+        velocities_tensor = torch.tensor(velocities, dtype=torch.float32)
+        atomic_types_tensor = torch.tensor(atomic_numbers, dtype=torch.long)
+        lattice_tensor = torch.tensor(lattice, dtype=torch.float32).unsqueeze(0)
+        batch_indices_tensor = torch.zeros(len(atomic_numbers), dtype=torch.long)
+
+        # Prepare data dictionary
+        data = {
+            "positions": positions_tensor,
+            "velocities": velocities_tensor,
+            "lattice": lattice_tensor,
+            "atomic_types": atomic_types_tensor,
+        }
+        batch_idx = {
+            "positions": batch_indices_tensor,
+            "velocities": batch_indices_tensor,
+            "lattice": torch.tensor([0], dtype=torch.long),
+            "atomic_types": batch_indices_tensor,
+        }
+
+        return SimpleBatchedData(data=data,batch_idx=batch_idx)

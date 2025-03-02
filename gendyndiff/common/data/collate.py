@@ -4,6 +4,7 @@
 import warnings
 from typing import Any, Callable, Iterable, Iterator, Sequence, TypeVar, overload
 
+import self
 from torch import Tensor
 from torch_geometric.data import Batch, Data
 from typing_extensions import TypeGuard
@@ -12,7 +13,7 @@ warnings.filterwarnings(
     "ignore", "TypedStorage is deprecated", module="torch_geometric"
 )  # Till https://github.com/pyg-team/pytorch_geometric/pull/7034 is released.
 
-__all__ = ["collate", "find_structure", "separate"]
+__all__ = ["collate", "find_structure", "separate","CustomCollate"]
 
 TreeTypes = Data | Batch | Tensor | int | float | str | bool | None
 T = TypeVar("T", bound=TreeTypes)
@@ -421,3 +422,36 @@ def _get_i(xs: PyTree[T], i: int) -> PyTree[T]:
         return {k: _get_i(v, i) for k, v in xs.items()}
 
     raise ValueError(f"Cannot get example for `{type(xs)}`.")
+
+class CustomCollate:
+    def __call__(self, data_objs: list[Data]) -> Data:
+        """
+        Takes a list of Data objects, collates them using the existing collate
+        function, and returns the batched Data (usually a Batch object).
+        """
+        batched_data = collate(data_objs)
+        return batched_data
+
+    def print_atoms(self, batched_data: Data) -> None:
+        """
+        Iterates over each atom in the batched Data batch and prints its details.
+        The method assumes that the batch has the following fields:
+           - positions: Tensor of shape [num_atoms, 3]
+           - atomic_types: Tensor of shape [num_atoms]
+           - lattice: Tensor of shape
+           - velocities: Tensor of shape [num_atoms, 3]
+           - forces: Tensor of shape [num_atoms, 3]
+        """
+        num_atoms = batched_data.atomic_types.size(0)
+        for i in range(num_atoms):
+            pos = batched_data.positions[i].tolist()  # converts [x, y, z] to list
+            atype = batched_data.atomic_types[i].item()  # converts 1-element tensor to scalar
+            vel = batched_data.velocities[i].tolist()  # converts velocity vector to list
+            frc = batched_data.forces[i].tolist()  # converts force vector to list
+            lattice = batched_data.lattice.tolist()  # common lattice; same for all atoms
+            print(f"Atom {i + 1}:")
+            print(f"  Position: {pos}")
+            print(f"  Atomic Type: {atype}")
+            print(f"  Lattice: {lattice}")
+            print(f"  Velocity: {vel}")
+            print(f"  Force: {frc}")

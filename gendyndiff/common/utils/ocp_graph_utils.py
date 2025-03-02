@@ -12,7 +12,7 @@ import numpy as np
 import torch
 from torch_scatter import segment_coo, segment_csr
 
-from mattergen.common.utils.globals import get_pyg_device
+from gendyndiff.common.utils.globals import get_pyg_device
 
 
 def get_pbc_distances(

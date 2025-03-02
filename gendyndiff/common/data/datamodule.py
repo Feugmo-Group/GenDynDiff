@@ -9,8 +9,8 @@ import torch
 from omegaconf import DictConfig
 from torch.utils.data import DataLoader
 
-from mattergen.common.data.collate import collate
-from mattergen.common.data.dataset import CrystalDataset
+from gendyndiff.common.data.collate import collate
+from gendyndiff.common.data.dataset import CrystalDataset
 
 
 def worker_init_fn(id: int):

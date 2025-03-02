@@ -6,12 +6,12 @@ from typing import Protocol, Sequence
 import torch
 from pymatgen.core import Composition
 
-from mattergen.common.data.chemgraph import ChemGraph
-from mattergen.common.utils.data_utils import (
+from gendyndiff.common.data.chemgraph import ChemGraph
+from gendyndiff.common.utils.data_utils import (
     compute_lattice_polar_decomposition,
     get_element_symbol,
 )
-from mattergen.common.utils.globals import MAX_ATOMIC_NUM
+from gendyndiff.common.utils.globals import MAX_ATOMIC_NUM
 
 
 class Transform(Protocol):

@@ -17,11 +17,12 @@ from pymatgen.symmetry.groups import SpaceGroup
 from torch.utils.data import Dataset
 from tqdm.auto import tqdm
 
-from mattergen.common.data.chemgraph import ChemGraph
-from mattergen.common.data.transform import Transform
-from mattergen.common.data.types import PropertySourceId, PropertyValues
-from mattergen.common.globals import PROJECT_ROOT
-from mattergen.common.utils.globals import PROPERTY_SOURCE_IDS
+from gendyndiff.common.data.chemgraph import ChemGraph
+from gendyndiff.common.data.transform import Transform
+from gendyndiff.common.data.types import PropertySourceId, PropertyValues
+from gendyndiff.common.globals import PROJECT_ROOT
+from gendyndiff.common.utils.globals import PROPERTY_SOURCE_IDS
+from gendyndiff.diffusion.data.batched_data import SimpleBatchedData
 
 CORE_STRUCTURE_FILE_NAMES = {
     "pos": "pos.npy",
@@ -161,7 +162,6 @@ class CrystalDataset(BaseDataset):
             f"Property names {property_names} are not valid. "
             f"Valid property source names: {PROPERTY_SOURCE_IDS}"
         )
-
     @classmethod
     def from_csv(
         cls,

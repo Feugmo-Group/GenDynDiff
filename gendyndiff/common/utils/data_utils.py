@@ -9,8 +9,8 @@ import numpy as np
 import torch
 from pymatgen.core import Element
 
-from mattergen.common.data.chemgraph import ChemGraph
-from mattergen.common.utils.ocp_graph_utils import radius_graph_pbc as radius_graph_pbc_ocp
+from gendyndiff.common.data.chemgraph import ChemGraph
+from gendyndiff.common.utils.ocp_graph_utils import radius_graph_pbc as radius_graph_pbc_ocp
 
 EPSILON = 1e-5
 

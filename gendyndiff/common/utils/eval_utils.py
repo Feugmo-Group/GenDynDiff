@@ -15,13 +15,13 @@ import torch
 from pymatgen.core import Lattice, Structure
 from pymatgen.io.ase import AseAtomsAdaptor
 
-from mattergen.common.globals import (
+from gendyndiff.common.globals import (
     GENERATED_CRYSTALS_EXTXYZ_FILE_NAME,
     GENERATED_CRYSTALS_ZIP_FILE_NAME,
 )
-from mattergen.common.utils.data_classes import MatterGenCheckpointInfo
-from mattergen.common.utils.globals import get_device
-from mattergen.diffusion.lightning_module import DiffusionLightningModule
+from gendyndiff.common.utils.data_classes import MatterGenCheckpointInfo
+from gendyndiff.common.utils.globals import get_device
+from gendyndiff.diffusion.lightning_module import DiffusionLightningModule
 
 # logging
 logging.basicConfig(level=logging.INFO)

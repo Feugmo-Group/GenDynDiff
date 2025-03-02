@@ -25,7 +25,7 @@ hydra:
 
 defaults:
   - _self_
-  - data: ???
+  - data: dump_data.yaml
   - logging: default
   - model: vae
   - optim: default

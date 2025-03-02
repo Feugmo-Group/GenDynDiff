@@ -8,7 +8,7 @@ from typing import Sequence
 import numpy as np
 from emmet.core.material import PropertyOrigin
 
-from mattergen.common.utils.globals import PROPERTY_SOURCE_IDS
+from gendyndiff.common.utils.globals import PROPERTY_SOURCE_IDS
 
 PropertySourceId = str
 TargetProperty = dict[PropertySourceId, int | float | Sequence[str]]
