@@ -14,28 +14,28 @@ import torch.nn as nn
 from torch_scatter import scatter
 from torch_sparse import SparseTensor
 
-from mattergen.common.gemnet.layers.atom_update_block import OutputBlock
-from mattergen.common.gemnet.layers.base_layers import Dense
-from mattergen.common.gemnet.layers.efficient import EfficientInteractionDownProjection
-from mattergen.common.gemnet.layers.embedding_block import EdgeEmbedding
-from mattergen.common.gemnet.layers.interaction_block import InteractionBlockTripletsOnly
-from mattergen.common.gemnet.layers.radial_basis import RadialBasis
-from mattergen.common.gemnet.layers.scaling import AutomaticFit
-from mattergen.common.gemnet.layers.spherical_basis import CircularBasisLayer
-from mattergen.common.gemnet.utils import (
+from gendyndiff.common.gemnet.layers.atom_update_block import OutputBlock
+from gendyndiff.common.gemnet.layers.base_layers import Dense
+from gendyndiff.common.gemnet.layers.efficient import EfficientInteractionDownProjection
+from gendyndiff.common.gemnet.layers.embedding_block import EdgeEmbedding
+from gendyndiff.common.gemnet.layers.interaction_block import InteractionBlockTripletsOnly
+from gendyndiff.common.gemnet.layers.radial_basis import RadialBasis
+from gendyndiff.common.gemnet.layers.scaling import AutomaticFit
+from gendyndiff.common.gemnet.layers.spherical_basis import CircularBasisLayer
+from gendyndiff.common.gemnet.utils import (
     inner_product_normalized,
     mask_neighbors,
     ragged_range,
     repeat_blocks,
 )
-from mattergen.common.utils.data_utils import (
+from gendyndiff.common.utils.data_utils import (
     frac_to_cart_coords_with_lattice,
     get_pbc_distances,
     lattice_params_to_matrix_torch,
     radius_graph_pbc,
 )
-from mattergen.common.utils.globals import MODELS_PROJECT_ROOT, get_device, get_pyg_device
-from mattergen.common.utils.lattice_score import edge_score_to_lattice_score_frac_symmetric
+from gendyndiff.common.utils.globals import MODELS_PROJECT_ROOT, get_device, get_pyg_device
+from gendyndiff.common.utils.lattice_score import edge_score_to_lattice_score_frac_symmetric
 
 
 @dataclass(frozen=True)

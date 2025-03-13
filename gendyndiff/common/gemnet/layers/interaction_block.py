@@ -9,11 +9,11 @@ import math
 
 import torch
 
-from mattergen.common.gemnet.layers.atom_update_block import AtomUpdateBlock
-from mattergen.common.gemnet.layers.base_layers import Dense, ResidualLayer
-from mattergen.common.gemnet.layers.efficient import EfficientInteractionBilinear
-from mattergen.common.gemnet.layers.embedding_block import EdgeEmbedding
-from mattergen.common.gemnet.layers.scaling import ScalingFactor
+from gendyndiff.common.gemnet.layers.atom_update_block import AtomUpdateBlock
+from gendyndiff.common.gemnet.layers.base_layers import Dense, ResidualLayer
+from gendyndiff.common.gemnet.layers.efficient import EfficientInteractionBilinear
+from gendyndiff.common.gemnet.layers.embedding_block import EdgeEmbedding
+from gendyndiff.common.gemnet.layers.scaling import ScalingFactor
 
 
 class InteractionBlockTripletsOnly(torch.nn.Module):

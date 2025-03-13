@@ -9,7 +9,7 @@ from warnings import warn
 
 import torch
 
-from mattergen.common.gemnet.initializers import he_orthogonal_init
+from gendyndiff.common.gemnet.initializers import he_orthogonal_init
 
 
 class EfficientInteractionDownProjection(torch.nn.Module):

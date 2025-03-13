@@ -11,10 +11,10 @@ import torch
 import torch.nn as nn
 from torch_scatter import scatter
 
-from mattergen.common.data.types import PropertySourceId
-from mattergen.common.gemnet.gemnet import GemNetT, ModelOutput
-from mattergen.common.gemnet.utils import inner_product_normalized
-from mattergen.common.utils.data_utils import (
+from gendyndiff.common.data.types import PropertySourceId
+from gendyndiff.common.gemnet.gemnet import GemNetT, ModelOutput
+from gendyndiff.common.gemnet.utils import inner_product_normalized
+from gendyndiff.common.utils.data_utils import (
     frac_to_cart_coords_with_lattice,
     lattice_params_to_matrix_torch,
 )

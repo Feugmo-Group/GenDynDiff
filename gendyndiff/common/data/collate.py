@@ -442,16 +442,17 @@ class CustomCollate:
            - velocities: Tensor of shape [num_atoms, 3]
            - forces: Tensor of shape [num_atoms, 3]
         """
-        num_atoms = batched_data.atomic_types.size(0)
+        num_atoms = batched_data.atoms.size(0)
+        timestep = getattr(batched_data, 'timesteps', None)  # Retrieve timestep if available
+
+        print(f"Timestep: {timestep}")  # Print actual timestep value
         for i in range(num_atoms):
             pos = batched_data.positions[i].tolist()  # converts [x, y, z] to list
-            atype = batched_data.atomic_types[i].item()  # converts 1-element tensor to scalar
             vel = batched_data.velocities[i].tolist()  # converts velocity vector to list
             frc = batched_data.forces[i].tolist()  # converts force vector to list
+            atype = batched_data.atoms[i].item()  # converts 1-element tensor to scalar
             lattice = batched_data.lattice.tolist()  # common lattice; same for all atoms
             print(f"Atom {i + 1}:")
             print(f"  Position: {pos}")
-            print(f"  Atomic Type: {atype}")
-            print(f"  Lattice: {lattice}")
             print(f"  Velocity: {vel}")
             print(f"  Force: {frc}")

@@ -9,7 +9,7 @@ import logging
 
 import torch
 
-from mattergen.common.gemnet.utils import read_value_json, update_json
+from gendyndiff.common.gemnet.utils import read_value_json, update_json
 
 
 class AutomaticFit:

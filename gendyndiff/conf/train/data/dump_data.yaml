@@ -13,7 +13,9 @@ dataset_transforms:
     _partial_: true
 
 average_density: 0.05771451654022283 # atoms/Angstrom**3 : this is used in models/scripts/run.py to set lattice_limit_density
-root_dir: ${oc.env:PROJECT_ROOT}/../datasets/SrTiO3
+
+data_module:
+  root_dir: /home/agore/GenDynDiff/datasets/SrTiO3
 
 train_dataset:
   _target_: gendyndiff.diffusion.data.batched_data.CustomCrystalDataset.from_dump_file
@@ -40,4 +42,5 @@ batch_size:
   val: 128
   test: 128
 
-max_epochs: 900
+max_epochs: 900   # whatever buddy
+

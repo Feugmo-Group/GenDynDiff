@@ -8,8 +8,8 @@ Adapted from https://github.com/FAIR-Chem/fairchem/blob/main/src/fairchem/core/m
 import numpy as np
 import torch
 
-from mattergen.common.gemnet.layers.base_layers import Dense
-from mattergen.common.utils.globals import MAX_ATOMIC_NUM
+from gendyndiff.common.gemnet.layers.base_layers import Dense
+from gendyndiff.common.utils.globals import MAX_ATOMIC_NUM
 
 
 class IdentityEmbedding(torch.nn.Identity):

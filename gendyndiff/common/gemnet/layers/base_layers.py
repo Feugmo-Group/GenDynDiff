@@ -11,7 +11,7 @@ from typing import Optional
 
 import torch
 
-from mattergen.common.gemnet.initializers import he_orthogonal_init
+from gendyndiff.common.gemnet.initializers import he_orthogonal_init
 
 
 class Dense(torch.nn.Module):

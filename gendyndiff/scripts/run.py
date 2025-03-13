@@ -19,14 +19,17 @@ from gendyndiff.common.data.collate import CustomCollate
 
 logger = logging.getLogger(__name__)
 @hydra.main(
-    config_path=str(MODELS_PROJECT_ROOT / "conf" / "data" ), config_name="defaults", version_base="1.1"
+    config_path=str(MODELS_PROJECT_ROOT / "conf" ), config_name="default", version_base="1.1"
 )
-def orgomol_main(cfg: omegaconf.DictConfig):
+def gendyndiff_main(cfg: omegaconf.DictConfig):
+    print(OmegaConf.to_yaml(cfg))
+    print(f"data_module.root_dir: {cfg.data.data_module.root_dir}")
     # Tensor Core acceleration (leads to ~2x speed-up during training)
     torch.set_float32_matmul_precision("high")
-    dump_file_path = cfg.data_module.train_dataset.dump_file_path
-    cfg_file_path = cfg.data_module.train_dataset.cfg_file_path
-
+    dump_file_path = cfg.data.train_dataset.dump_file_path    #cfg is not related here, need the correct path
+    cfg_file_path = cfg.data.train_dataset.cfg_file_path
+    print(dump_file_path)
+    print(cfg_file_path)
     # Load custom dataset
     dataset = CustomCrystalDataset.from_dump_file(
         dump_file_path=dump_file_path,
@@ -34,9 +37,7 @@ def orgomol_main(cfg: omegaconf.DictConfig):
     )
     print("Custom Dataset Contents:")
     print(dataset)
-
-    #main(config)
-    data_obj = dataset[0]
+    data_obj = dataset
     custom_collate = CustomCollate()
 
     # Collate the single Data object (wrapped in a list)
@@ -46,7 +47,7 @@ def orgomol_main(cfg: omegaconf.DictConfig):
 
 
 if __name__ == "__main__":
-    orgomol_main()
+    gendyndiff_main()
 
     #why isnt commit working
 #commit

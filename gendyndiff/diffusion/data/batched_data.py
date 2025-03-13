@@ -189,41 +189,40 @@ def _construct_batch_idx(data_list: list[Any], field_name: str) -> torch.LongTen
 
 # Custom Crystal dataset class to handle dump data from molecular trajectories
 # Takes an NPT file, makes it into the mattergen format
+# Modifying so that it reads all data from all timeframes
 class CustomCrystalDataset:
     @classmethod
     def from_dump_file(cls, dump_file_path, cfg_file_path):
+        from torch_geometric.data import Data
         from ase.io.lammpsrun import read_lammps_dump_text
-        from ase.io import read
 
-        # Read atoms from dump and cfg files
-        atoms = read_lammps_dump_text(fileobj=open(dump_file_path), index=-1)
-        cfg = read(cfg_file_path)
+        with open(dump_file_path, 'r') as file:
+            all_timesteps = read_lammps_dump_text(fileobj=file, index=slice(None))  # Read all timesteps
 
-        # Extract data
-        positions = atoms.get_positions()
-        velocities = atoms.get_velocities()
-        atomic_numbers = atoms.numbers
-        lattice = atoms.cell
+        data_objects = []
 
-        # Convert to tensors
-        positions_tensor = torch.tensor(positions, dtype=torch.float32)
-        velocities_tensor = torch.tensor(velocities, dtype=torch.float32)
-        atomic_types_tensor = torch.tensor(atomic_numbers, dtype=torch.long)
-        lattice_tensor = torch.tensor(lattice, dtype=torch.float32).unsqueeze(0)
-        batch_indices_tensor = torch.zeros(len(atomic_numbers), dtype=torch.long)
+        for atoms in all_timesteps:
+            positions = atoms.get_positions()
+            velocities = atoms.get_velocities()
+            atomic_numbers = atoms.numbers
+            lattice = atoms.cell.array
+            forces = atoms.get_forces()
+            timestep = atoms.info.get('ITEM: TIMESTEP', None)
 
-        # Prepare data dictionary
-        data = {
-            "positions": positions_tensor,
-            "velocities": velocities_tensor,
-            "lattice": lattice_tensor,
-            "atomic_types": atomic_types_tensor,
-        }
-        batch_idx = {
-            "positions": batch_indices_tensor,
-            "velocities": batch_indices_tensor,
-            "lattice": torch.tensor([0], dtype=torch.long),
-            "atomic_types": batch_indices_tensor,
-        }
+            positions_tensor = torch.tensor(positions, dtype=torch.float32)
+            velocities_tensor = torch.tensor(velocities, dtype=torch.float32)
+            forces_tensor = torch.tensor(forces, dtype=torch.float32)
+            lattice_tensor = torch.tensor(lattice, dtype=torch.float32).unsqueeze(0)
+            atomic_types_tensor = torch.tensor(atomic_numbers, dtype=torch.long)
 
-        return SimpleBatchedData(data=data,batch_idx=batch_idx)
+            data_obj = Data(
+                positions=positions_tensor,
+                velocities=velocities_tensor,
+                lattice=lattice_tensor.squeeze(0),  # Remove extra batch dim
+                forces=forces_tensor,
+                atoms=atomic_types_tensor,
+                timestep=timestep,
+            )
+            data_objects.append(data_obj)
+
+        return data_objects

@@ -1,0 +1,42 @@
+project: learn_dynamic
+group: test
+expname: test
+core:
+  version: 0.0.1
+  tags:
+  - ${model._target_}
+data:
+  _target_: gendyndiff.common.data.datamodule.CrystDataModule
+  _recursive_: true
+  properties: []
+  transforms:
+  - _target_: gendyndiff.common.data.transform.symmetrize_lattice
+    _partial_: true
+  - _target_: gendyndiff.common.data.transform.set_chemical_system_string
+    _partial_: true
+  dataset_transforms:
+  - _target_: gendyndiff.common.data.dataset_transform.filter_sparse_properties
+    _partial_: true
+  average_density: 0.05771451654022283
+  root_dir: ${oc.env:PROJECT_ROOT}/../datasets/SrTiO3
+  train_dataset:
+    _target_: gendyndiff.diffusion.data.batched_data.CustomCrystalDataset.from_dump_file
+    dump_file_path: ${data_module.root_dir}/dump.NPT
+    cfg_file_path: ${data_module.root_dir}/SrTiO3_supercell_555.cfg
+  val_dataset:
+    _target_: gendyndiff.diffusion.data.batched_data.CustomCrystalDataset.from_dump_file
+    dump_file_path: ${data_module.root_dir}/dump.NPT
+    cfg_file_path: ${data_module.root_dir}/SrTiO3_supercell_555.cfg
+  test_dataset:
+    _target_: gendyndiff.diffusion.data.batched_data.CustomCrystalDataset.from_dump_file
+    dump_file_path: ${data_module.root_dir}/dump.NPT
+    cfg_file_path: ${data_module.root_dir}/SrTiO3_supercell_555.cfg
+  num_workers:
+    train: 0
+    val: 0
+    test: 0
+  batch_size:
+    train: 128
+    val: 128
+    test: 128
+  max_epochs: 900

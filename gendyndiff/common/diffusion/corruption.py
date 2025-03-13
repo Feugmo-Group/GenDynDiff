@@ -4,11 +4,11 @@
 import torch
 from omegaconf import DictConfig
 
-from mattergen.diffusion.corruption.corruption import B, BatchedData, maybe_expand
-from mattergen.diffusion.corruption.sde_lib import SDE as DiffSDE
-from mattergen.diffusion.corruption.sde_lib import VESDE as DiffVESDE
-from mattergen.diffusion.corruption.sde_lib import VPSDE
-from mattergen.diffusion.wrapped.wrapped_sde import WrappedVESDE
+from gendyndiff.diffusion.corruption.corruption import B, BatchedData, maybe_expand
+from gendyndiff.diffusion.corruption.sde_lib import SDE as DiffSDE
+from gendyndiff.diffusion.corruption.sde_lib import VESDE as DiffVESDE
+from gendyndiff.diffusion.corruption.sde_lib import VPSDE
+from gendyndiff.diffusion.wrapped.wrapped_sde import WrappedVESDE
 
 
 def expand(a, x_shape, left=False):

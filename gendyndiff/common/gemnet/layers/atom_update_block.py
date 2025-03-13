@@ -10,9 +10,9 @@ from typing import Tuple
 import torch
 from torch_scatter import scatter
 
-from mattergen.common.gemnet.initializers import he_orthogonal_init
-from mattergen.common.gemnet.layers.base_layers import Dense, ResidualLayer
-from mattergen.common.gemnet.layers.scaling import ScalingFactor
+from gendyndiff.common.gemnet.initializers import he_orthogonal_init
+from gendyndiff.common.gemnet.layers.base_layers import Dense, ResidualLayer
+from gendyndiff.common.gemnet.layers.scaling import ScalingFactor
 
 
 class AtomUpdateBlock(torch.nn.Module):
