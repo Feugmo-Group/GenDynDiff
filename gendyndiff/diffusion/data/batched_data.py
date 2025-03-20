@@ -207,6 +207,54 @@ class CustomCrystalDataset:
             atomic_numbers = atoms.numbers
             lattice = atoms.cell.array
             forces = atoms.get_forces()
+
+            def read_lammps_types(dump_file_path):
+                all_types = []  # Will hold types from all timesteps
+                type_to_atomic_number = {1: 38, 2: 22, 3: 8}
+                # Define mapping from atomic numbers to element symbols
+                atomic_number_to_symbol = {38: "Sr", 22: "Ti", 8: "O"}
+
+                with open(dump_file_path, 'r') as f:
+                    atoms_section = False
+                    atom_id_to_type = {}  # Reset for each timestep
+
+                    for line in f:
+                        line = line.strip()
+
+                        if line.startswith("ITEM: TIMESTEP") and atom_id_to_type:
+                            sorted_types = [atom_id_to_type[id] for id in sorted(atom_id_to_type.keys())]
+                            all_types.extend(sorted_types)
+                            atom_id_to_type = {}  # Reset for next timestep
+                            atoms_section = False
+
+                        # Check if we've reached the atoms section
+                        if line.startswith("ITEM: ATOMS"):
+                            atoms_section = True
+                            continue
+
+                        # Process atom data lines
+                        if atoms_section and line and not line.startswith("ITEM:"):
+                            columns = line.split()
+                            if len(columns) > 1:
+                                atom_id = int(columns[0])
+                                type_val = float(columns[1])
+                                if type_val <= 3.0:
+                                    mapped_val = type_to_atomic_number.get(int(type_val))
+                                    if mapped_val is not None:
+                                        atom_id_to_type[atom_id] = mapped_val
+
+                    # Don't forget to process the last timestep
+                    if atom_id_to_type:
+                        sorted_types = [atom_id_to_type[id] for id in sorted(atom_id_to_type.keys())]
+                        all_types.extend(sorted_types)
+
+                # Create a new array with element symbols
+                all_symbols = [atomic_number_to_symbol[atomic_num] for atomic_num in all_types]
+
+                return all_types, all_symbols
+
+            elements, atom_symbols = read_lammps_types(dump_file_path)
+
             timestep = atoms.info.get('ITEM: TIMESTEP', None)
 
             positions_tensor = torch.tensor(positions, dtype=torch.float32)
@@ -214,6 +262,7 @@ class CustomCrystalDataset:
             forces_tensor = torch.tensor(forces, dtype=torch.float32)
             lattice_tensor = torch.tensor(lattice, dtype=torch.float32).unsqueeze(0)
             atomic_types_tensor = torch.tensor(atomic_numbers, dtype=torch.long)
+            elements_tensor = torch.tensor(elements, dtype=torch.long)
 
             data_obj = Data(
                 positions=positions_tensor,
@@ -222,6 +271,7 @@ class CustomCrystalDataset:
                 forces=forces_tensor,
                 atoms=atomic_types_tensor,
                 timestep=timestep,
+                elements=elements_tensor,
             )
             data_objects.append(data_obj)
 

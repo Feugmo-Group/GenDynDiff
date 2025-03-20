@@ -450,9 +450,11 @@ class CustomCollate:
             pos = batched_data.positions[i].tolist()  # converts [x, y, z] to list
             vel = batched_data.velocities[i].tolist()  # converts velocity vector to list
             frc = batched_data.forces[i].tolist()  # converts force vector to list
-            atype = batched_data.atoms[i].item()  # converts 1-element tensor to scalar
+            atype = batched_data.atoms[i].item()
+            elements = batched_data.elements[i].item()
             lattice = batched_data.lattice.tolist()  # common lattice; same for all atoms
-            print(f"Atom {i + 1}:")
+            print(f"Trajectory {i + 1}:")
+            print(f"  Element (Atomic Number): {elements}")
             print(f"  Position: {pos}")
             print(f"  Velocity: {vel}")
             print(f"  Force: {frc}")
