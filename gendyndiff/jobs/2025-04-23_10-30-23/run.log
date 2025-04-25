@@ -1,0 +1,14 @@
+[2025-04-23 10:30:37,884][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: False, used: False
+[2025-04-23 10:30:37,885][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2025-04-23 10:30:37,885][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+[2025-04-23 10:30:38,434][pytorch_lightning.callbacks.model_summary][INFO] - 
+  | Name             | Type            | Params | Mode 
+-------------------------------------------------------------
+0 | diffusion_module | DiffusionModule | 44.6 M | train
+-------------------------------------------------------------
+44.6 M    Trainable params
+22        Non-trainable params
+44.6 M    Total params
+178.244   Total estimated model params size (MB)
+1006      Modules in train mode
+0         Modules in eval mode

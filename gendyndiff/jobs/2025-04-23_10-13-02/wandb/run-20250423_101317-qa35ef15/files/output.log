@@ -1,0 +1,15 @@
+/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/torch/optim/lr_scheduler.py:62: UserWarning: The verbose parameter is deprecated. Please use get_last_lr() to access the learning rate.
+  warnings.warn(
+[2025-04-23 10:13:18,107][pytorch_lightning.callbacks.model_summary][INFO] -
+  | Name             | Type            | Params | Mode
+-------------------------------------------------------------
+0 | diffusion_module | DiffusionModule | 44.6 M | train
+-------------------------------------------------------------
+44.6 M    Trainable params
+22        Non-trainable params
+44.6 M    Total params
+178.244   Total estimated model params size (MB)
+1006      Modules in train mode
+0         Modules in eval mode
+Sanity Checking DataLoader 0:   0%|                                                                                                                           | 0/2 [00:00<?, ?it/s]Warning: Wrapped SDE has received input outside of the wrapping boundary.
+/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:425: The 'val_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=7` in the `DataLoader` to improve performance.

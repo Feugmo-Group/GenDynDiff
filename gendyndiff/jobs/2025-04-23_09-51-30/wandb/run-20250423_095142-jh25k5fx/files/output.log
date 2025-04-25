@@ -1,0 +1,100 @@
+/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/torch/optim/lr_scheduler.py:62: UserWarning: The verbose parameter is deprecated. Please use get_last_lr() to access the learning rate.
+  warnings.warn(
+[2025-04-23 09:51:43,335][pytorch_lightning.callbacks.model_summary][INFO] -
+  | Name             | Type            | Params | Mode
+-------------------------------------------------------------
+0 | diffusion_module | DiffusionModule | 44.6 M | train
+-------------------------------------------------------------
+44.6 M    Trainable params
+22        Non-trainable params
+44.6 M    Total params
+178.244   Total estimated model params size (MB)
+1006      Modules in train mode
+0         Modules in eval mode
+Sanity Checking DataLoader 0:   0%|                                                                                                                           | 0/2 [00:00<?, ?it/s]Warning: Wrapped SDE has received input outside of the wrapping boundary.
+/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:425: The 'val_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=7` in the `DataLoader` to improve performance.
+Error executing job with overrides: []
+Traceback (most recent call last):
+  File "/home/agore/GenDynDiff/gendyndiff/run.py", line 27, in run_pipeline
+    train(cfg)
+  File "/home/agore/GenDynDiff/gendyndiff/run.py", line 15, in train
+    trainer.fit(lightning_module, datamodule=datamodule)
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/pytorch_lightning/trainer/trainer.py", line 539, in fit
+    call._call_and_handle_interrupt(
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/pytorch_lightning/trainer/call.py", line 47, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/pytorch_lightning/trainer/trainer.py", line 575, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/pytorch_lightning/trainer/trainer.py", line 982, in _run
+    results = self._run_stage()
+              ^^^^^^^^^^^^^^^^^
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/pytorch_lightning/trainer/trainer.py", line 1024, in _run_stage
+    self._run_sanity_check()
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/pytorch_lightning/trainer/trainer.py", line 1053, in _run_sanity_check
+    val_loop.run()
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/pytorch_lightning/loops/utilities.py", line 179, in _decorator
+    return loop_run(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/pytorch_lightning/loops/evaluation_loop.py", line 144, in run
+    self._evaluation_step(batch, batch_idx, dataloader_idx, dataloader_iter)
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/pytorch_lightning/loops/evaluation_loop.py", line 433, in _evaluation_step
+    output = call._call_strategy_hook(trainer, hook_name, *step_args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/pytorch_lightning/trainer/call.py", line 323, in _call_strategy_hook
+    output = fn(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/pytorch_lightning/strategies/strategy.py", line 412, in validation_step
+    return self.lightning_module.validation_step(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/agore/GenDynDiff/gendyndiff/diffusion/lightning_module.py", line 142, in validation_step
+    return self._calc_loss(val_batch, False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/agore/GenDynDiff/gendyndiff/diffusion/lightning_module.py", line 149, in _calc_loss
+    loss, metrics = self.diffusion_module.calc_loss(batch)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/agore/GenDynDiff/gendyndiff/diffusion/diffusion_module.py", line 84, in calc_loss
+    score_model_output = self.model(noisy_batch, t)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/agore/GenDynDiff/denoiser.py", line 248, in forward
+    output = self.gemnet(
+             ^^^^^^^^^^^^
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/agore/GenDynDiff/gendyndiff/common/gemnet/gemnet.py", line 677, in forward
+    h = self.atom_emb(atomic_numbers)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/agore/GenDynDiff/gendyndiff/common/gemnet/layers/embedding_block.py", line 49, in forward
+    h = self.embeddings(Z - 1)  # -1 because Z.min()=1 (==Hydrogen)
+        ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/torch/nn/modules/sparse.py", line 190, in forward
+    return F.embedding(
+           ^^^^^^^^^^^^
+  File "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/lib/python3.12/site-packages/torch/nn/functional.py", line 2551, in embedding
+    return torch.embedding(weight, input, padding_idx, scale_grad_by_freq, sparse)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IndexError: index out of range in self
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.

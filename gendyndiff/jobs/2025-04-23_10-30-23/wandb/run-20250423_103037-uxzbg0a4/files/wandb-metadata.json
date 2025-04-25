@@ -1,0 +1,30 @@
+{
+  "os":  "Linux-5.15.167.4-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python":  "CPython 3.12.3",
+  "startedAt":  "2025-04-23T14:30:37.497046Z",
+  "program":  "/home/agore/GenDynDiff/gendyndiff/run.py",
+  "codePath":  "gendyndiff/run.py",
+  "git":  {
+    "remote":  "https://github.com/Feugmo-Group/GenDynDiff.git",
+    "commit":  "7b4ba21454c6583e74bf3f65ae25724c0d330cc3"
+  },
+  "email":  "advaitgore@gmail.com",
+  "root":  ".",
+  "host":  "AdvaitLaptop",
+  "executable":  "/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/bin/python",
+  "cpu_count":  4,
+  "cpu_count_logical":  8,
+  "disk":  {
+    "/":  {
+      "total":  "1081101176832",
+      "used":  "19558285312"
+    }
+  },
+  "memory":  {
+    "total":  "3991691264"
+  },
+  "cpu":  {
+    "count":  4,
+    "countLogical":  8
+  }
+}
