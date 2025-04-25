@@ -7,18 +7,18 @@ from typing import Dict, List, Type
 import pytest
 import torch
 
-from mattergen.diffusion.corruption.corruption import Corruption
-from mattergen.diffusion.corruption.multi_corruption import MultiCorruption, apply
-from mattergen.diffusion.corruption.sde_lib import SDE
-from mattergen.diffusion.data.batched_data import SimpleBatchedData
-from mattergen.diffusion.losses import DenoisingScoreMatchingLoss
-from mattergen.diffusion.tests.conftest import SDE_TYPES
-from mattergen.diffusion.training.field_loss import (
+from gendyndiff.diffusion.corruption.corruption import Corruption
+from gendyndiff.diffusion.corruption.multi_corruption import MultiCorruption, apply
+from gendyndiff.diffusion.corruption.sde_lib import SDE
+from gendyndiff.diffusion.data.batched_data import SimpleBatchedData
+from gendyndiff.diffusion.losses import DenoisingScoreMatchingLoss
+from gendyndiff.diffusion.tests.conftest import SDE_TYPES
+from gendyndiff.diffusion.training.field_loss import (
     aggregate_per_sample,
     compute_noise_given_sample_and_corruption,
 )
-from mattergen.diffusion.wrapped.wrapped_normal_loss import wrapped_normal_loss
-from mattergen.diffusion.wrapped.wrapped_sde import WrappedVESDE
+from gendyndiff.diffusion.wrapped.wrapped_normal_loss import wrapped_normal_loss
+from gendyndiff.diffusion.wrapped.wrapped_sde import WrappedVESDE
 
 
 def get_multi_corruption(corruption_type, keys: List[str]):

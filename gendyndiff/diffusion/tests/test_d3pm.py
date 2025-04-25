@@ -30,7 +30,7 @@ import numpy as np
 import pytest
 import torch
 
-from mattergen.diffusion.d3pm import d3pm as diffusion
+from gendyndiff.diffusion.d3pm import d3pm as diffusion
 
 
 @pytest.mark.parametrize("schedule_kind", ["linear", "standard", "cosine"])

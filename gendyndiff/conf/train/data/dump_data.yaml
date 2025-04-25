@@ -1,46 +1,133 @@
-_target_: gendyndiff.common.data.datamodule.CrystDataModule
-_recursive_: true
-properties: []
-
-transforms:
-- _target_: gendyndiff.common.data.transform.symmetrize_lattice
-  _partial_: true
-- _target_: gendyndiff.common.data.transform.set_chemical_system_string
-  _partial_: true
-
-dataset_transforms:
-  - _target_: gendyndiff.common.data.dataset_transform.filter_sparse_properties
-    _partial_: true
-
-average_density: 0.05771451654022283 # atoms/Angstrom**3 : this is used in models/scripts/run.py to set lattice_limit_density
-
+auto_resume: true
+checkpoint_path: null
 data_module:
-  root_dir: /home/agore/GenDynDiff/datasets/SrTiO3
-
-train_dataset:
-  _target_: gendyndiff.diffusion.data.batched_data.CustomCrystalDataset.from_dump_file
-  dump_file_path: ${data_module.root_dir}/dump.NPT
-  cfg_file_path: ${data_module.root_dir}/SrTiO3_supercell_555.cfg
-
-val_dataset:
-  _target_: gendyndiff.diffusion.data.batched_data.CustomCrystalDataset.from_dump_file
-  dump_file_path: ${data_module.root_dir}/dump.NPT
-  cfg_file_path: ${data_module.root_dir}/SrTiO3_supercell_555.cfg
-
-test_dataset:
-  _target_: gendyndiff.diffusion.data.batched_data.CustomCrystalDataset.from_dump_file
-  dump_file_path: ${data_module.root_dir}/dump.NPT
-  cfg_file_path: ${data_module.root_dir}/SrTiO3_supercell_555.cfg
-
-num_workers:
-  train: 0
-  val: 0
-  test: 0
-
-batch_size:
-  train: 128
-  val: 128
-  test: 128
-
-max_epochs: 900   # whatever buddy
-
+  _recursive_: true
+  _target_: gendyndiff.common.data.datamodule.CrystDataModule
+  average_density: 0.05771451654022283
+  batch_size:
+    train: 32
+    val: 32
+  max_epochs: 2200
+  num_workers:
+    train: 0
+    val: 0
+  properties: []
+  root_dir: datasets/SrTiO3
+  train_dataset:
+    _target_: gendyndiff.common.data.dump_dataset.DumpDataset.from_dump_file
+    cache_path: datasets/SrTiO3/dump.NPT
+    properties: []
+    transforms: []
+  val_dataset:
+    _target_: gendyndiff.common.data.dataset.DumpDataset.from_dump_file
+    cache_path: datasets/SrTiO3/dump.NPT
+    properties: []
+    transforms: []
+lightning_module:
+  _target_: gendyndiff.diffusion.lightning_module.DiffusionLightningModule
+  diffusion_module:
+    _target_: gendyndiff.diffusion.diffusion_module.DiffusionModule
+    corruption:
+      _target_: gendyndiff.diffusion.corruption.multi_corruption.MultiCorruption
+      discrete_corruptions: {}
+      sdes:
+        pos:
+          _target_: gendyndiff.common.diffusion.corruption.NumAtomsVarianceAdjustedWrappedVESDE
+          limit_info_key: num_atoms
+          sigma_max: 5.0
+          wrapping_boundary: 1.0
+    loss_fn:
+      _target_: gendyndiff.common.loss.MaterialsLoss
+      d3pm_hybrid_lambda: 0.01
+      include_atomic_numbers: false
+      include_cell: false
+      include_pos: true
+      reduce: sum
+      weights:
+        atomic_numbers: 0.0
+        cell: 0.0
+        pos: 1.0
+    model:
+      _target_: gendyndiff.denoiser.GemNetTDenoiser
+      atom_type_diffusion: none
+      denoise_atom_types: false
+      gemnet:
+        _target_: gendyndiff.common.gemnet.gemnet.GemNetT
+        atom_embedding:
+          _target_: gendyndiff.common.gemnet.layers.embedding_block.AtomEmbedding
+          emb_size: 512
+          with_mask_type: false
+        cutoff: 7.0
+        emb_size_atom: 512
+        emb_size_edge: 512
+        latent_dim: 512
+        max_cell_images_per_dim: 5
+        max_neighbors: 50
+        num_blocks: 4
+        num_targets: 1
+        otf_graph: true
+        regress_stress: false
+        scale_file: /scratch/amlt_code/gendyndiff/common/gemnet/gemnet-dT.json
+      hidden_dim: 512
+      property_embeddings: {}
+      property_embeddings_adapt: {}
+    pre_corruption_fn:
+      _target_: gendyndiff.property_embeddings.SetEmbeddingType
+      dropout_fields_iid: false
+      p_unconditional: 0.2
+  optimizer_partial:
+    _partial_: true
+    _target_: torch.optim.Adam
+    lr: 0.0001
+  scheduler_partials:
+  - frequency: 1
+    interval: epoch
+    monitor: loss_train
+    scheduler:
+      _partial_: true
+      _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+      factor: 0.6
+      min_lr: 1.0e-06
+      patience: 100
+      verbose: true
+    strict: true
+load_original: false
+params: {}
+train: true
+trainer:
+  _target_: pytorch_lightning.Trainer
+  accelerator: gpu
+  accumulate_grad_batches: 1
+  callbacks:
+  - _target_: pytorch_lightning.callbacks.LearningRateMonitor
+    log_momentum: false
+    logging_interval: step
+  - _target_: pytorch_lightning.callbacks.ModelCheckpoint
+    every_n_epochs: 1
+    filename: '{epoch}-{loss_val:.2f}'
+    mode: min
+    monitor: loss_val
+    save_last: true
+    save_top_k: 1
+    verbose: false
+  - _target_: pytorch_lightning.callbacks.TQDMProgressBar
+    refresh_rate: 50
+  - _target_: gendyndiff.common.data.callback.SetPropertyScalers
+  check_val_every_n_epoch: 5
+  devices: 8
+  gradient_clip_algorithm: value
+  gradient_clip_val: 0.5
+  logger:
+    _target_: pytorch_lightning.loggers.WandbLogger
+    job_type: train
+    project: velocity-generation
+    settings:
+      _save_requirements: false
+      _target_: wandb.Settings
+      start_method: fork
+  max_epochs: 2200
+  num_nodes: 2
+  precision: 32
+  strategy:
+    _target_: pytorch_lightning.strategies.ddp.DDPStrategy
+    find_unused_parameters: true

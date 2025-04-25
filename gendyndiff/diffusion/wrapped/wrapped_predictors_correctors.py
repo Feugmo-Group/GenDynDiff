@@ -5,13 +5,13 @@ from typing import Optional, Tuple
 
 import torch
 
-import mattergen.diffusion.sampling.predictors_correctors as pc
-from mattergen.diffusion.corruption import sde_lib
-from mattergen.diffusion.corruption.corruption import Corruption
-from mattergen.diffusion.data.batched_data import BatchedData
-from mattergen.diffusion.exceptions import IncompatibleSampler
-from mattergen.diffusion.sampling import predictors
-from mattergen.diffusion.wrapped.wrapped_sde import WrappedSDEMixin
+import gendyndiff.diffusion.sampling.predictors_correctors as pc
+from gendyndiff.diffusion.corruption import sde_lib
+from gendyndiff.diffusion.corruption.corruption import Corruption
+from gendyndiff.diffusion.data.batched_data import BatchedData
+from gendyndiff.diffusion.exceptions import IncompatibleSampler
+from gendyndiff.diffusion.sampling import predictors
+from gendyndiff.diffusion.wrapped.wrapped_sde import WrappedSDEMixin
 
 # importing SampleAndMean does not work because of circular imports, so we have to redefine it here.
 SampleAndMean = Tuple[torch.Tensor, torch.Tensor]

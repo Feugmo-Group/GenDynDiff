@@ -10,8 +10,7 @@ from omegaconf import DictConfig
 from torch.utils.data import DataLoader
 
 from gendyndiff.common.data.collate import collate
-from gendyndiff.common.data.dataset import CrystalDataset
-
+from gendyndiff.common.data.dump_dataset import DumpDataset
 
 def worker_init_fn(id: int):
     """
@@ -34,11 +33,11 @@ def worker_init_fn(id: int):
 class CrystDataModule(pl.LightningDataModule):
     def __init__(
         self,
-        train_dataset: CrystalDataset,
+        train_dataset: DumpDataset,
         num_workers: DictConfig,
         batch_size: DictConfig,
-        val_dataset: CrystalDataset | None = None,
-        test_dataset: CrystalDataset | None = None,
+        val_dataset: DumpDataset | None = None,
+        test_dataset: DumpDataset | None = None,
         **_,
     ):
         super().__init__()

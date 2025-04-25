@@ -16,22 +16,22 @@ from pymatgen.core.structure import Structure
 from pymatgen.io.ase import AseAtomsAdaptor
 from tqdm import tqdm
 
-from mattergen.common.data.chemgraph import ChemGraph
-from mattergen.common.data.collate import collate
-from mattergen.common.data.condition_factory import ConditionLoader
-from mattergen.common.data.num_atoms_distribution import NUM_ATOMS_DISTRIBUTIONS
-from mattergen.common.data.types import TargetProperty
-from mattergen.common.utils.data_utils import lattice_matrix_to_params_torch
-from mattergen.common.utils.eval_utils import (
-    MatterGenCheckpointInfo,
+from gendyndiff.common.data.chemgraph import ChemGraph
+from gendyndiff.common.data.collate import collate
+from gendyndiff.common.data.condition_factory import ConditionLoader
+from gendyndiff.common.data.num_atoms_distribution import NUM_ATOMS_DISTRIBUTIONS
+from gendyndiff.common.data.types import TargetProperty
+from gendyndiff.common.utils.data_utils import lattice_matrix_to_params_torch
+from gendyndiff.common.utils.eval_utils import (
+    GenDynDiffCheckpointInfo,
     get_crystals_list,
     load_model_diffusion,
     make_structure,
     save_structures,
 )
-from mattergen.common.utils.globals import DEFAULT_SAMPLING_CONFIG_PATH, get_device
-from mattergen.diffusion.lightning_module import DiffusionLightningModule
-from mattergen.diffusion.sampling.pc_sampler import PredictorCorrector
+from gendyndiff.common.utils.globals import DEFAULT_SAMPLING_CONFIG_PATH, get_device
+from gendyndiff.diffusion.lightning_module import DiffusionLightningModule
+from gendyndiff.diffusion.sampling.pc_sampler import PredictorCorrector
 
 
 def draw_samples_from_sampler(
@@ -170,7 +170,7 @@ def structures_from_trajectory(traj: list[ChemGraph]) -> list[Structure]:
 
 @dataclass
 class CrystalGenerator:
-    checkpoint_info: MatterGenCheckpointInfo
+    checkpoint_info: GenDynDiffCheckpointInfo
 
     # These may be set at runtime
     batch_size: int | None = None
@@ -299,7 +299,7 @@ class CrystalGenerator:
                 num_batches * batch_size // len(target_compositions_dict)
             )
             sampling_config_overrides += [
-                "condition_loader_partial._target_=mattergen.common.data.condition_factory.get_composition_data_loader",
+                "condition_loader_partial._target_=gendyndiff.common.data.condition_factory.get_composition_data_loader",
                 f"+condition_loader_partial.num_structures_to_generate_per_composition={num_structures_to_generate_per_composition}",
                 f"+condition_loader_partial.batch_size={batch_size}",
             ]

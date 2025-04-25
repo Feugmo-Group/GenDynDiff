@@ -6,9 +6,9 @@ from functools import partial
 import pytest
 import torch
 
-from mattergen.diffusion.model_target import ModelTarget
-from mattergen.diffusion.model_utils import convert_model_out_to_score
-from mattergen.diffusion.tests.conftest import SDE_TYPES
+from gendyndiff.diffusion.model_target import ModelTarget
+from gendyndiff.diffusion.model_utils import convert_model_out_to_score
+from gendyndiff.diffusion.tests.conftest import SDE_TYPES
 
 
 @pytest.mark.parametrize("sde_type", SDE_TYPES)

@@ -190,88 +190,40 @@ def _construct_batch_idx(data_list: list[Any], field_name: str) -> torch.LongTen
 # Custom Crystal dataset class to handle dump data from molecular trajectories
 # Takes an NPT file, makes it into the mattergen format
 # Modifying so that it reads all data from all timeframes
+from torch_geometric.data import Data
+from ase.io.lammpsrun import read_lammps_dump_text
+import torch
+
 class CustomCrystalDataset:
     @classmethod
-    def from_dump_file(cls, dump_file_path, cfg_file_path):
-        from torch_geometric.data import Data
-        from ase.io.lammpsrun import read_lammps_dump_text
+    def from_dump_file(cls, dump_file_path):
 
+        # Read all timesteps from the dump file
         with open(dump_file_path, 'r') as file:
-            all_timesteps = read_lammps_dump_text(fileobj=file, index=slice(None))  # Read all timesteps
+            all_timesteps = read_lammps_dump_text(fileobj=file, index=slice(None))
 
         data_objects = []
-
         for atoms in all_timesteps:
-            positions = atoms.get_positions()
-            velocities = atoms.get_velocities()
-            atomic_numbers = atoms.numbers
-            lattice = atoms.cell.array
-            forces = atoms.get_forces()
+            # Instead of reading positions, extract velocities.
+            velocities = atoms.get_velocities()  # shape: (N, 3)
+            # In our new setup, we want to use velocities as the main input.
+            velocities_tensor = torch.tensor(velocities, dtype=torch.float32)
 
-            def read_lammps_types(dump_file_path):
-                all_types = []  # Will hold types from all timesteps
-                type_to_atomic_number = {1: 38, 2: 22, 3: 8}
-                # Define mapping from atomic numbers to element symbols
-                atomic_number_to_symbol = {38: "Sr", 22: "Ti", 8: "O"}
+            # Other useful data: atomic numbers, lattice, and forces (if available)
+            atomic_numbers = atoms.numbers  # Sorted correctly as per the dump file
+            lattice = atoms.cell.array  # (3, 3) lattice matrix
+            forces = atoms.get_forces()  # (N, 3) forces; optional
 
-                with open(dump_file_path, 'r') as f:
-                    atoms_section = False
-                    atom_id_to_type = {}  # Reset for each timestep
-
-                    for line in f:
-                        line = line.strip()
-
-                        if line.startswith("ITEM: TIMESTEP") and atom_id_to_type:
-                            sorted_types = [atom_id_to_type[id] for id in sorted(atom_id_to_type.keys())]
-                            all_types.extend(sorted_types)
-                            atom_id_to_type = {}  # Reset for next timestep
-                            atoms_section = False
-
-                        # Check if we've reached the atoms section
-                        if line.startswith("ITEM: ATOMS"):
-                            atoms_section = True
-                            continue
-
-                        # Process atom data lines
-                        if atoms_section and line and not line.startswith("ITEM:"):
-                            columns = line.split()
-                            if len(columns) > 1:
-                                atom_id = int(columns[0])
-                                type_val = float(columns[1])
-                                if type_val <= 3.0:
-                                    mapped_val = type_to_atomic_number.get(int(type_val))
-                                    if mapped_val is not None:
-                                        atom_id_to_type[atom_id] = mapped_val
-
-                    # Don't forget to process the last timestep
-                    if atom_id_to_type:
-                        sorted_types = [atom_id_to_type[id] for id in sorted(atom_id_to_type.keys())]
-                        all_types.extend(sorted_types)
-
-                # Create a new array with element symbols
-                all_symbols = [atomic_number_to_symbol[atomic_num] for atomic_num in all_types]
-
-                return all_types, all_symbols
-
-            elements, atom_symbols = read_lammps_types(dump_file_path)
+            # Convert data to tensors
+            lattice_tensor = torch.tensor(lattice, dtype=torch.float32).unsqueeze(0)  # add batch dim then remove later
+            atomic_types_tensor = torch.tensor(atomic_numbers, dtype=torch.long)
 
             timestep = atoms.info.get('ITEM: TIMESTEP', None)
 
-            positions_tensor = torch.tensor(positions, dtype=torch.float32)
-            velocities_tensor = torch.tensor(velocities, dtype=torch.float32)
-            forces_tensor = torch.tensor(forces, dtype=torch.float32)
-            lattice_tensor = torch.tensor(lattice, dtype=torch.float32).unsqueeze(0)
-            atomic_types_tensor = torch.tensor(atomic_numbers, dtype=torch.long)
-            elements_tensor = torch.tensor(elements, dtype=torch.long)
-
+            # Construct the PyTorch Geometric Data object. Note that here we replace the positions.
             data_obj = Data(
-                positions=positions_tensor,
-                velocities=velocities_tensor,
-                lattice=lattice_tensor.squeeze(0),  # Remove extra batch dim
-                forces=forces_tensor,
-                atoms=atomic_types_tensor,
+                pos=velocities_tensor,  # velocities are now treated as "positions"
                 timestep=timestep,
-                elements=elements_tensor,
             )
             data_objects.append(data_obj)
 

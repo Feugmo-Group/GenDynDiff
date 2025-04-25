@@ -5,8 +5,8 @@ from typing import Optional, Tuple, Union
 
 import torch
 
-from mattergen.diffusion.corruption.sde_lib import SDE, VESDE, VPSDE
-from mattergen.diffusion.data.batched_data import BatchedData
+from gendyndiff.diffusion.corruption.sde_lib import SDE, VESDE, VPSDE
+from gendyndiff.diffusion.data.batched_data import BatchedData
 
 B = Optional[torch.LongTensor]
 

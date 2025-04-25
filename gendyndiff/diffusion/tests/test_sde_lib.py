@@ -6,8 +6,8 @@ from typing import Type
 import pytest
 import torch
 
-from mattergen.diffusion.corruption.sde_lib import SDE
-from mattergen.diffusion.tests.conftest import SDE_TYPES
+from gendyndiff.diffusion.corruption.sde_lib import SDE
+from gendyndiff.diffusion.tests.conftest import SDE_TYPES
 
 
 def _check_batch_shape(x: torch.Tensor, batch_size: torch.LongTensor):

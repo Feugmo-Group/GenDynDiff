@@ -8,17 +8,17 @@ import numpy
 import pytest
 import torch
 
-from mattergen.diffusion.corruption.corruption import Corruption
-from mattergen.diffusion.corruption.d3pm_corruption import D3PMCorruption
-from mattergen.diffusion.corruption.sde_lib import SDE, VESDE, VPSDE
-from mattergen.diffusion.data.batched_data import BatchedData, SimpleBatchedData, collate_fn
-from mattergen.diffusion.sampling import predictors
-from mattergen.diffusion.sampling import predictors_correctors as pc
-from mattergen.diffusion.wrapped.wrapped_predictors_correctors import (
+from gendyndiff.diffusion.corruption.corruption import Corruption
+from gendyndiff.diffusion.corruption.d3pm_corruption import D3PMCorruption
+from gendyndiff.diffusion.corruption.sde_lib import SDE, VESDE, VPSDE
+from gendyndiff.diffusion.data.batched_data import BatchedData, SimpleBatchedData, collate_fn
+from gendyndiff.diffusion.sampling import predictors
+from gendyndiff.diffusion.sampling import predictors_correctors as pc
+from gendyndiff.diffusion.wrapped.wrapped_predictors_correctors import (
     WrappedAncestralSamplingPredictor,
     WrappedLangevinCorrector,
 )
-from mattergen.diffusion.wrapped.wrapped_sde import WrappedVESDE, WrappedVPSDE
+from gendyndiff.diffusion.wrapped.wrapped_sde import WrappedVESDE, WrappedVPSDE
 
 SDE_TYPES = [
     VPSDE,

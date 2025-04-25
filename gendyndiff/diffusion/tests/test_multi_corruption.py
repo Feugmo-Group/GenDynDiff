@@ -6,9 +6,9 @@ from typing import Any, Dict, Type
 import pytest
 import torch
 
-from mattergen.diffusion.corruption.multi_corruption import MultiCorruption
-from mattergen.diffusion.corruption.sde_lib import SDE
-from mattergen.diffusion.tests.conftest import SDE_TYPES
+from gendyndiff.diffusion.corruption.multi_corruption import MultiCorruption
+from gendyndiff.diffusion.corruption.sde_lib import SDE
+from gendyndiff.diffusion.tests.conftest import SDE_TYPES
 
 
 # .sde() is only defined for continuous corruptions, hence we only test SDEs here (and not discrete corruptions)

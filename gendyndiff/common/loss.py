@@ -4,10 +4,10 @@
 from functools import partial
 from typing import Dict, Literal, Optional
 
-from mattergen.diffusion.losses import SummedFieldLoss, denoising_score_matching
-from mattergen.diffusion.model_target import ModelTarget
-from mattergen.diffusion.training.field_loss import FieldLoss, d3pm_loss
-from mattergen.diffusion.wrapped.wrapped_normal_loss import wrapped_normal_loss
+from gendyndiff.diffusion.losses import SummedFieldLoss, denoising_score_matching
+from gendyndiff.diffusion.model_target import ModelTarget
+from gendyndiff.diffusion.training.field_loss import FieldLoss, d3pm_loss
+from gendyndiff.diffusion.wrapped.wrapped_normal_loss import wrapped_normal_loss
 
 
 class MaterialsLoss(SummedFieldLoss):

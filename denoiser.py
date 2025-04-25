@@ -6,12 +6,12 @@ from typing import Callable
 import torch
 import torch.nn as nn
 
-from mattergen.common.data.chemgraph import ChemGraph
-from mattergen.common.data.types import PropertySourceId
-from mattergen.common.utils.globals import MAX_ATOMIC_NUM, SELECTED_ATOMIC_NUMBERS
-from mattergen.diffusion.model_utils import NoiseLevelEncoding
-from mattergen.diffusion.score_models.base import ScoreModel
-from mattergen.property_embeddings import (
+from gendyndiff.common.data.chemgraph import ChemGraph
+from gendyndiff.common.data.types import PropertySourceId
+from gendyndiff.common.utils.globals import MAX_ATOMIC_NUM, SELECTED_ATOMIC_NUMBERS
+from gendyndiff.diffusion.model_utils import NoiseLevelEncoding
+from gendyndiff.diffusion.score_models.base import ScoreModel
+from gendyndiff.property_embeddings import (
     ChemicalSystemMultiHotEmbedding,
     get_property_embeddings,
     get_use_unconditional_embedding,

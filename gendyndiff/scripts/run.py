@@ -33,7 +33,6 @@ def gendyndiff_main(cfg: omegaconf.DictConfig):
     # Load custom dataset
     dataset = CustomCrystalDataset.from_dump_file(
         dump_file_path=dump_file_path,
-        cfg_file_path=cfg_file_path,
     )
     print("Custom Dataset Contents:")
     print(dataset)

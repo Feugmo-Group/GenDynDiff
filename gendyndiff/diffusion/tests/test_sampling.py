@@ -8,23 +8,23 @@ from typing import Callable, Dict, List, Type, Union
 import pytest
 import torch
 
-from mattergen.diffusion.corruption.sde_lib import SDE, VESDE, VPSDE
-from mattergen.diffusion.d3pm.d3pm_predictors_correctors import D3PMAncestralSamplingPredictor
-from mattergen.diffusion.exceptions import IncompatibleSampler
-from mattergen.diffusion.sampling import predictors_correctors as pc
-from mattergen.diffusion.sampling.predictors import AncestralSamplingPredictor, Predictor
-from mattergen.diffusion.tests.conftest import (
+from gendyndiff.diffusion.corruption.sde_lib import SDE, VESDE, VPSDE
+from gendyndiff.diffusion.d3pm.d3pm_predictors_correctors import D3PMAncestralSamplingPredictor
+from gendyndiff.diffusion.exceptions import IncompatibleSampler
+from gendyndiff.diffusion.sampling import predictors_correctors as pc
+from gendyndiff.diffusion.sampling.predictors import AncestralSamplingPredictor, Predictor
+from gendyndiff.diffusion.tests.conftest import (
     DEFAULT_CORRECTORS,
     DEFAULT_PREDICTORS,
     SDE_TYPES,
     WRAPPED_CORRECTORS,
     WRAPPED_PREDICTORS,
 )
-from mattergen.diffusion.wrapped.wrapped_predictors_correctors import (
+from gendyndiff.diffusion.wrapped.wrapped_predictors_correctors import (
     WrappedAncestralSamplingPredictor,
     WrappedLangevinCorrector,
 )
-from mattergen.diffusion.wrapped.wrapped_sde import WrappedVESDE, WrappedVPSDE
+from gendyndiff.diffusion.wrapped.wrapped_sde import WrappedVESDE, WrappedVPSDE
 
 D3PM_SAMPLERS = [
     D3PMAncestralSamplingPredictor,

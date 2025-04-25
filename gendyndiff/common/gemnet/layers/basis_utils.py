@@ -11,6 +11,7 @@ import numpy as np
 import sympy as sym
 from scipy import special as sp
 from scipy.optimize import brentq
+from scipy.special import factorial
 
 
 def Jn(r: np.array, n: int) -> np.array:
@@ -106,8 +107,8 @@ def sph_harm_prefactor(l_degree: int, m_order: int) -> float:
     return (
         (2 * l_degree + 1)
         / (4 * np.pi)
-        * np.math.factorial(l_degree - abs(m_order))
-        / np.math.factorial(l_degree + abs(m_order))
+        * factorial(l_degree - abs(m_order))
+        / factorial(l_degree + abs(m_order))
     ) ** 0.5
 
 
@@ -177,8 +178,8 @@ def associated_legendre_polynomials(
                     for m_order in range(1, l_degree + 1):  # P_1(-1), P_2(-1) P_2(-2)
                         P_l_m[l_degree][-m_order] = sym.simplify(
                             (-1) ** m_order
-                            * np.math.factorial(l_degree - m_order)
-                            / np.math.factorial(l_degree + m_order)
+                            * factorial(l_degree - m_order)
+                            / factorial(l_degree + m_order)
                             * P_l_m[l_degree][m_order]
                         )
 

@@ -3,7 +3,7 @@
 
 import torch
 
-from mattergen.diffusion.data.batched_data import SimpleBatchedData, _batch_edge_index, collate_fn
+from gendyndiff.diffusion.data.batched_data import SimpleBatchedData, _batch_edge_index, collate_fn
 
 
 def test_collate_fn():

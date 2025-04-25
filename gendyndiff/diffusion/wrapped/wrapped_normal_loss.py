@@ -5,9 +5,9 @@ from typing import Literal, Optional
 
 import torch
 
-from mattergen.diffusion.corruption.sde_lib import SDE, maybe_expand
-from mattergen.diffusion.data.batched_data import BatchedData
-from mattergen.diffusion.training.field_loss import aggregate_per_sample
+from gendyndiff.diffusion.corruption.sde_lib import SDE, maybe_expand
+from gendyndiff.diffusion.data.batched_data import BatchedData
+from gendyndiff.diffusion.training.field_loss import aggregate_per_sample
 
 
 def get_pbc_offsets(pbc: torch.Tensor, max_offset_integer: int = 3) -> torch.Tensor:

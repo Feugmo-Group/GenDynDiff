@@ -423,38 +423,16 @@ def _get_i(xs: PyTree[T], i: int) -> PyTree[T]:
 
     raise ValueError(f"Cannot get example for `{type(xs)}`.")
 
+
 class CustomCollate:
-    def __call__(self, data_objs: list[Data]) -> Data:
-        """
-        Takes a list of Data objects, collates them using the existing collate
-        function, and returns the batched Data (usually a Batch object).
-        """
-        batched_data = collate(data_objs)
-        return batched_data
+    def __call__(self, data_objs: list[Data]) -> Batch:
+        """Collates Data objects containing only pos (velocities) and timestep"""
+        return Batch.from_data_list(data_objs)
 
-    def print_atoms(self, batched_data: Data) -> None:
-        """
-        Iterates over each atom in the batched Data batch and prints its details.
-        The method assumes that the batch has the following fields:
-           - positions: Tensor of shape [num_atoms, 3]
-           - atomic_types: Tensor of shape [num_atoms]
-           - lattice: Tensor of shape
-           - velocities: Tensor of shape [num_atoms, 3]
-           - forces: Tensor of shape [num_atoms, 3]
-        """
-        num_atoms = batched_data.atoms.size(0)
-        timestep = getattr(batched_data, 'timesteps', None)  # Retrieve timestep if available
+    def print_data(self, batched_data: Batch) -> None:
+        """Prints batched velocity data and timesteps"""
+        print(f"Total atoms in batch: {batched_data.pos.shape[0]}")
+        print(f"Velocity tensor shape: {batched_data.pos.shape}")
 
-        print(f"Timestep: {timestep}")  # Print actual timestep value
-        for i in range(num_atoms):
-            pos = batched_data.positions[i].tolist()  # converts [x, y, z] to list
-            vel = batched_data.velocities[i].tolist()  # converts velocity vector to list
-            frc = batched_data.forces[i].tolist()  # converts force vector to list
-            atype = batched_data.atoms[i].item()
-            elements = batched_data.elements[i].item()
-            lattice = batched_data.lattice.tolist()  # common lattice; same for all atoms
-            print(f"Trajectory {i + 1}:")
-            print(f"  Element (Atomic Number): {elements}")
-            print(f"  Position: {pos}")
-            print(f"  Velocity: {vel}")
-            print(f"  Force: {frc}")
+        if hasattr(batched_data, 'timestep'):
+            print("Timesteps:", batched_data.timestep)

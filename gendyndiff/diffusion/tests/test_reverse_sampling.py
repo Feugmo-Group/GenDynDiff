@@ -15,22 +15,22 @@ from typing import List, Type
 import pytest
 import torch
 
-from mattergen.diffusion.corruption.multi_corruption import MultiCorruption
-from mattergen.diffusion.corruption.sde_lib import SDE
-from mattergen.diffusion.data.batched_data import BatchedData, SimpleBatchedData
-from mattergen.diffusion.diffusion_module import DiffusionModule
-from mattergen.diffusion.exceptions import IncompatibleSampler
-from mattergen.diffusion.model_target import ModelTarget
-from mattergen.diffusion.sampling.pc_sampler import PredictorCorrector
-from mattergen.diffusion.tests.conftest import (
+from gendyndiff.diffusion.corruption.multi_corruption import MultiCorruption
+from gendyndiff.diffusion.corruption.sde_lib import SDE
+from gendyndiff.diffusion.data.batched_data import BatchedData, SimpleBatchedData
+from gendyndiff.diffusion.diffusion_module import DiffusionModule
+from gendyndiff.diffusion.exceptions import IncompatibleSampler
+from gendyndiff.diffusion.model_target import ModelTarget
+from gendyndiff.diffusion.sampling.pc_sampler import PredictorCorrector
+from gendyndiff.diffusion.tests.conftest import (
     DEFAULT_CORRECTORS,
     DEFAULT_PREDICTORS,
     SDE_TYPES,
     WRAPPED_CORRECTORS,
     WRAPPED_PREDICTORS,
 )
-from mattergen.diffusion.tests.test_sampling import INCOMPATIBLE_SAMPLERS
-from mattergen.diffusion.wrapped.wrapped_sde import WrappedVESDE, WrappedVPSDE
+from gendyndiff.diffusion.tests.test_sampling import INCOMPATIBLE_SAMPLERS
+from gendyndiff.diffusion.wrapped.wrapped_sde import WrappedVESDE, WrappedVPSDE
 
 
 def score_given_xt(

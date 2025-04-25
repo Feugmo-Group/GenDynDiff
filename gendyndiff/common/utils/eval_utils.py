@@ -19,7 +19,7 @@ from gendyndiff.common.globals import (
     GENERATED_CRYSTALS_EXTXYZ_FILE_NAME,
     GENERATED_CRYSTALS_ZIP_FILE_NAME,
 )
-from gendyndiff.common.utils.data_classes import MatterGenCheckpointInfo
+from gendyndiff.common.utils.data_classes import GenDynDiffCheckpointInfo
 from gendyndiff.common.utils.globals import get_device
 from gendyndiff.diffusion.lightning_module import DiffusionLightningModule
 
@@ -46,7 +46,7 @@ def make_structure(
 
 
 def load_model_diffusion(
-    args: MatterGenCheckpointInfo,
+    args: GenDynDiffCheckpointInfo,
 ) -> DiffusionLightningModule:
     assert args.load_epoch is not None
     ckpt = args.checkpoint_path
