@@ -203,7 +203,7 @@ class CrystalGenerator:
         assert self.num_atoms_distribution in NUM_ATOMS_DISTRIBUTIONS, (
             f"num_atoms_distribution must be one of {list(NUM_ATOMS_DISTRIBUTIONS.keys())}, "
             f"but got {self.num_atoms_distribution}. To add your own distribution, "
-            "please add it to mattergen.common.data.num_atoms_distribution.NUM_ATOMS_DISTRIBUTIONS."
+            "please add it to gendyndiff.common.data.num_atoms_distribution.NUM_ATOMS_DISTRIBUTIONS."
         )
         if len(self.target_compositions_dict) > 0:
             assert self.cfg.lightning_module.diffusion_module.loss_fn.weights.get(
@@ -286,7 +286,7 @@ class CrystalGenerator:
             sampling_config_overrides = self.sampling_config_overrides.copy()
         if not target_compositions_dict:
             # Default `condition_loader_partial` is
-            # mattergen.common.data.condition_factory.get_number_of_atoms_condition_loader
+            # gendyndiff.common.data.condition_factory.get_number_of_atoms_condition_loader
             sampling_config_overrides += [
                 f"+condition_loader_partial.num_atoms_distribution={self.num_atoms_distribution}",
                 f"+condition_loader_partial.batch_size={batch_size}",

@@ -19,7 +19,7 @@ BatchTransform = Callable[[ChemGraph], ChemGraph]
 
 class GemNetTAdapter(GemNetTDenoiser):
     """
-    Denoiser layerwise adapter with GemNetT. On top of a mattergen.denoiser.GemNetTDenoiser,
+    Denoiser layerwise adapter with GemNetT. On top of a gendyndiff.denoiser.GemNetTDenoiser,
     additionally inputs <property_embeddings_adapt> that specifies extra conditions to be conditioned on.
     """
 

@@ -7,14 +7,14 @@ from typing import Callable, Iterable, Sequence
 import torch
 from torch.utils.data import DataLoader, Dataset
 
-from mattergen.common.data.chemgraph import ChemGraph
-from mattergen.common.data.collate import collate
-from mattergen.common.data.dataset import NumAtomsCrystalDataset
-from mattergen.common.data.num_atoms_distribution import NUM_ATOMS_DISTRIBUTIONS
-from mattergen.common.data.transform import SetProperty, Transform
-from mattergen.common.data.types import TargetProperty
-from mattergen.common.utils.data_utils import create_chem_graph_from_composition
-from mattergen.diffusion.data.batched_data import BatchedData
+from gendyndiff.common.data.chemgraph import ChemGraph
+from gendyndiff.common.data.collate import collate
+from gendyndiff.common.data.dataset import NumAtomsCrystalDataset
+from gendyndiff.common.data.num_atoms_distribution import NUM_ATOMS_DISTRIBUTIONS
+from gendyndiff.common.data.transform import SetProperty, Transform
+from gendyndiff.common.data.types import TargetProperty
+from gendyndiff.common.utils.data_utils import create_chem_graph_from_composition
+from gendyndiff.diffusion.data.batched_data import BatchedData
 
 ConditionLoader = Iterable[tuple[BatchedData, dict[str, torch.Tensor]] | None]
 

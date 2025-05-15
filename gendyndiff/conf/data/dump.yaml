@@ -15,10 +15,10 @@ data_module:
   root_dir: datasets/SrTiO3
   train_dataset:
     _target_: gendyndiff.common.data.dump_dataset.DumpDataset.from_dump_file
-    dump_file_path: /home/agore/GenDynDiff/datasets/SrTiO3/dump.NPT        #this needs to be fixed but it needs the actual path that you would have, just change your username
+    dump_file_path: /home/conrard/GenDynDiff/datasets/SrTiO3/dump.NPT        #this needs to be fixed but it needs the actual path that you would have, just change your username
   val_dataset:
     _target_: gendyndiff.common.data.dump_dataset.DumpDataset.from_dump_file
-    dump_file_path: /home/agore/GenDynDiff/datasets/SrTiO3/dump.NPT       #this needs to be fixed but it needs the actual path that you would have, just change your username
+    dump_file_path: /home/conrard/GenDynDiff/datasets/SrTiO3/dump.NPT       #this needs to be fixed but it needs the actual path that you would have, just change your username
 lightning_module:
   _target_: gendyndiff.diffusion.lightning_module.DiffusionLightningModule
   diffusion_module:
