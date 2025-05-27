@@ -90,7 +90,7 @@ params: {}
 train: true
 trainer:
   _target_: pytorch_lightning.Trainer
-  accelerator: cpu  #remember to change when running on cluster
+  accelerator: gpu  #remember to change when running on cluster
   accumulate_grad_batches: 1
   callbacks:
   - _target_: pytorch_lightning.callbacks.LearningRateMonitor
