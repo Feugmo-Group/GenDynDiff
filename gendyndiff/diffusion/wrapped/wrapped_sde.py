@@ -39,7 +39,7 @@ class WrappedSDEMixin:
             and hasattr(self, "wrapping_boundary")
         )
         if (x > self.wrapping_boundary).any() or (x < 0).any():
-            # Values outside the wrapping boundary are valid in principle, but could point to an issue in the data preprocessing,
+            #Values outside the wrapping boundary are valid in principle, but could point to an issue in the data preprocessing,
             # as typically we assume that the input data is inside the wrapping boundary (e.g., angles between 0 and 2*pi).
             print("Warning: Wrapped SDE has received input outside of the wrapping boundary.")
         noisy_x = _super.sample_marginal(x=x, t=t, batch_idx=batch_idx, batch=batch)

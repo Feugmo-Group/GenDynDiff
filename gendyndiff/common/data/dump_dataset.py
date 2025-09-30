@@ -11,8 +11,9 @@ dummy placeholders for required fields (cell, atomic_numbers, and num_atoms).
 This ensures compatibility with the GenDynDiff (MatterGen) pipeline and its
 CrystDataModule.
 """
-
+import ase.io.lammpsrun
 import torch
+import numpy as np
 from torch.utils.data import Dataset
 from ase.io.lammpsrun import read_lammps_dump_text
 from gendyndiff.common.data.chemgraph import ChemGraph
@@ -23,7 +24,7 @@ class DumpDataset(Dataset):
     dataset of ChemGraph objects. Each ChemGraph represents a single timestep with:
       - pos: Velocity data as a (N, 3) tensor (where N is the number of atoms)
       - cell: A dummy (3, 3) cell matrix (using an identity matrix)
-      - atomic_numbers: Dummy atomic numbers (zeros) of shape (N,)
+      - atomic_numbers: Actual atomic numbers provided
       - num_atoms: The number of atoms in that timestep
       - timestep: The timestep index
     This dataset is intended to be used with the GenDynDiff data module.
@@ -55,19 +56,29 @@ class DumpDataset(Dataset):
 
         data_objects = []
         for idx, atoms in enumerate(all_timesteps):
-            # Extract velocities from the current timestep (shape: [N, 3])
-            velocities_tensor = torch.tensor(atoms.get_velocities(), dtype=torch.float32)
-            lattice_shape = torch.tensor(atoms.get_cell(), dtype=torch.float32)            # Retrieve the timestep information (if available)
-            timestep = atoms.info.get('ITEM: TIMESTEP', idx)
-            atomic_numbers = torch.tensor(atoms.get_atomic_numbers(), dtype=torch.long)
+            timestep = atoms.info.get('ITEM: TIMESTEP', idx) #extract timesteps
+
+            # Extract velocities from the current timestep
+            velocities = atoms.get_velocities() # Retrieving velocities from dataset
+            velocities_array = np.stack(velocities,0) # Shaping into (N,3) per timestep
+            velocities_tensor = torch.from_numpy(velocities_array).float() # Converting into torch tensor
+
+            lattice_shape_array = np.array(atoms.get_cell(), dtype=np.float32)
+            lattice_shape_tensor = torch.from_numpy(lattice_shape_array)
+
+            # Extract atomic numbers from the current timestep
+            atomic_numbers = atoms.get_atomic_numbers() # Retrieving atomic numbers from dataset
+            atomic_numbers_array = np.array(atomic_numbers,dtype=np.int64) # Shaping into (N,3) per timestep
+            atomic_numbers_tensor = torch.from_numpy(atomic_numbers_array).long() # Converting into torch tensor
+
             # Create a ChemGraph; placeholders are used for required fields:
             # - cell: an identity matrix as a dummy cell (3x3)
             # - atomic_numbers: a tensor of zeros with length equal to the number of atoms
             # - num_atoms: the actual number of atoms in this timestep
             chemgraph_obj = ChemGraph(
                 pos=velocities_tensor,  # Velocity data in pos field
-                cell=lattice_shape.unsqueeze(0),  # Real cells, work on fixing the pbs problem wednesday
-                atomic_numbers=atomic_numbers,  # Real atomic numbers
+                cell=lattice_shape_tensor.unsqueeze(0),  # Real cells, work on fixing the pbs problem wednesday
+                atomic_numbers=atomic_numbers_tensor,  # Real atomic numbers
                 num_atoms=torch.tensor(len(atoms), dtype=torch.long),
                 timestep=torch.tensor(idx, dtype=torch.long)
             )
@@ -77,7 +88,9 @@ class DumpDataset(Dataset):
 
 if __name__ == "__main__":
     # Example usage:
-    dump_file_path = "/home/agore/GenDynDiff/datasets/SrTiO3/dump.NPT"
+    dump_file_path = "/home/advaitgore/PycharmProjects/GenDynDiff/datasets/SrTiO3/dump.NPT"
     dataset = DumpDataset.from_dump_file(dump_file_path)
     print(f"Loaded dataset with {len(dataset)} timesteps.")
     print(dataset[0])
+
+

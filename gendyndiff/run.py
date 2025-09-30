@@ -1,6 +1,10 @@
 import hydra
+import torch
+torch.set_float32_matmul_precision("high")
 from omegaconf import DictConfig, OmegaConf
 from gendyndiff.common.utils.globals import MODELS_PROJECT_ROOT
+import gendyndiff.diffusion.wrapped.wrapped_sde as _wrapped
+_wrapped.print = lambda *a, **k: None
 def train(cfg: DictConfig) -> None:
     print(f"Training {cfg.data.lightning_module.diffusion_module.model} with {cfg.data.data_module}...")
     from hydra.utils import instantiate
@@ -21,9 +25,9 @@ def validate_batch(cfg: DictConfig) -> None:
 )
 def run_pipeline(cfg: DictConfig) -> None:
     print(OmegaConf.to_yaml(cfg))
+
     print(f"Fine-tuning a new {cfg.data.lightning_module.diffusion_module.model} on {cfg.data.data_module.train_dataset}...")
     print(MODELS_PROJECT_ROOT)
-
     train(cfg)
     # validate_batch(cfg)
     #if cfg.data.lightning_module.diffusion_module.model.fine_tune:

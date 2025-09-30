@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="/usr/bin/python3.12" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.12.3 WSL (Ubuntu): (/home/agore/.cache/pypoetry/virtualenvs/gendyndiff-apC4mu17-py3.12/bin/python)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Poetry (GenDynDiff)" project-jdk-type="Python SDK" />
 </project>

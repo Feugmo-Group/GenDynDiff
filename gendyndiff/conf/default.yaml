@@ -10,7 +10,7 @@ core:
 
 hydra:
   run:
-    dir: /home/conrard/GenDynDiff/gendyndiff/jobs/${now:%Y-%m-%d_%H-%M-%S}
+    dir: /home/advaitgore/PycharmProjects/GenDynDiff/gendyndiff/jobs/${now:%Y-%m-%d_%H-%M-%S}
 
   sweep:
     dir: ${oc.env:HYDRA_JOBS}/multirun/${now:%Y-%m-%d}/${expname}/

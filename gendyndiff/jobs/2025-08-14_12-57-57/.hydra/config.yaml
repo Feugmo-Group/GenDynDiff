@@ -17,16 +17,16 @@ data:
       val: 1
     max_epochs: 2200
     num_workers:
-      train: 0
-      val: 0
+      train: 4
+      val: 4
     properties: []
     root_dir: datasets/SrTiO3
     train_dataset:
       _target_: gendyndiff.common.data.dump_dataset.DumpDataset.from_dump_file
-      dump_file_path: /home/agore/GenDynDiff/datasets/SrTiO3/dump.NPT
+      dump_file_path: ${oc.env:PROJECT_ROOT}/../datasets/SrTiO3/dump.NPT
     val_dataset:
       _target_: gendyndiff.common.data.dump_dataset.DumpDataset.from_dump_file
-      dump_file_path: /home/agore/GenDynDiff/datasets/SrTiO3/dump.NPT
+      dump_file_path: ${oc.env:PROJECT_ROOT}/../datasets/SrTiO3/dump.NPT
   lightning_module:
     _target_: gendyndiff.diffusion.lightning_module.DiffusionLightningModule
     diffusion_module:
@@ -39,7 +39,7 @@ data:
             _target_: gendyndiff.common.diffusion.corruption.NumAtomsVarianceAdjustedWrappedVESDE
             limit_info_key: num_atoms
             sigma_max: 5.0
-            wrapping_boundary: 1.0
+            wrapping_boundary: 1000000.0
       loss_fn:
         _target_: gendyndiff.common.loss.MaterialsLoss
         d3pm_hybrid_lambda: 0.01
@@ -59,12 +59,12 @@ data:
             _target_: gendyndiff.common.gemnet.layers.embedding_block.AtomEmbedding
             emb_size: 512
             with_mask_type: false
-          cutoff: 7.0
+          cutoff: 5.0
           emb_size_atom: 512
           emb_size_edge: 512
           latent_dim: 512
           max_cell_images_per_dim: 5
-          max_neighbors: 50
+          max_neighbors: 20
           num_blocks: 4
           num_targets: 1
           otf_graph: true
@@ -90,7 +90,7 @@ data:
         _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
         factor: 0.6
         min_lr: 1.0e-06
-        patience: 100
+        patience: 50
         verbose: true
       strict: true
   load_original: false
@@ -98,8 +98,9 @@ data:
   train: true
   trainer:
     _target_: pytorch_lightning.Trainer
-    accelerator: cpu
-    accumulate_grad_batches: 1
+    accelerator: gpu
+    accumulate_grad_batches: 4
+    log_every_n_steps: 10
     callbacks:
     - _target_: pytorch_lightning.callbacks.LearningRateMonitor
       log_momentum: false
@@ -120,13 +121,8 @@ data:
     gradient_clip_algorithm: value
     gradient_clip_val: 0.5
     logger:
-      _target_: pytorch_lightning.loggers.WandbLogger
-      job_type: train
-      project: velocity-generation
-      settings:
-        _save_requirements: false
-        _target_: wandb.Settings
-        start_method: fork
+      _target_: pytorch_lightning.loggers.CSVLogger
+      save_dir: logs
     max_epochs: 2200
     num_nodes: 1
-    precision: 32
+    precision: 16-mixed

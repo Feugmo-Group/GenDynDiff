@@ -5,20 +5,20 @@ data_module:
   _target_: gendyndiff.common.data.datamodule.CrystDataModule
   average_density: 0.05771451654022283
   batch_size:
-    train: 1   #change to 32 for actual training
-    val: 1     #change to 32 for actual training
+    train: 1 #change to 32 for actual training
+    val: 1    #change to 32 for actual training
   max_epochs: 2200
   num_workers:
-    train: 0
-    val: 0
+    train: 4
+    val: 4
   properties: []
   root_dir: datasets/SrTiO3
   train_dataset:
     _target_: gendyndiff.common.data.dump_dataset.DumpDataset.from_dump_file
-    dump_file_path: /home/conrard/GenDynDiff/datasets/SrTiO3/dump.NPT        #this needs to be fixed but it needs the actual path that you would have, just change your username
+    dump_file_path: ${oc.env:PROJECT_ROOT}/../datasets/SrTiO3/dump.NPT
   val_dataset:
     _target_: gendyndiff.common.data.dump_dataset.DumpDataset.from_dump_file
-    dump_file_path: /home/conrard/GenDynDiff/datasets/SrTiO3/dump.NPT       #this needs to be fixed but it needs the actual path that you would have, just change your username
+    dump_file_path: ${oc.env:PROJECT_ROOT}/../datasets/SrTiO3/dump.NPT
 lightning_module:
   _target_: gendyndiff.diffusion.lightning_module.DiffusionLightningModule
   diffusion_module:
@@ -31,7 +31,7 @@ lightning_module:
           _target_: gendyndiff.common.diffusion.corruption.NumAtomsVarianceAdjustedWrappedVESDE
           limit_info_key: num_atoms
           sigma_max: 5.0
-          wrapping_boundary: 1.0
+          wrapping_boundary: 1.0e06  #originally 1.0
     loss_fn:
       _target_: gendyndiff.common.loss.MaterialsLoss
       d3pm_hybrid_lambda: 0.01
@@ -51,12 +51,12 @@ lightning_module:
           _target_: gendyndiff.common.gemnet.layers.embedding_block.AtomEmbedding
           emb_size: 512
           with_mask_type: false
-        cutoff: 7.0
+        cutoff: 5.0  #7.0 originally
         emb_size_atom: 512
         emb_size_edge: 512
         latent_dim: 512
         max_cell_images_per_dim: 5
-        max_neighbors: 50
+        max_neighbors: 20   #50 originally
         num_blocks: 4
         num_targets: 1
         otf_graph: true
@@ -82,7 +82,7 @@ lightning_module:
       _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
       factor: 0.6
       min_lr: 1.0e-06
-      patience: 100
+      patience: 50  #lowered from 100 to 50, doesnt seem to cause nAn either
       verbose: true
     strict: true
 load_original: false
@@ -91,7 +91,8 @@ train: true
 trainer:
   _target_: pytorch_lightning.Trainer
   accelerator: gpu  #remember to change when running on cluster
-  accumulate_grad_batches: 1
+  accumulate_grad_batches: 4
+  log_every_n_steps: 10
   callbacks:
   - _target_: pytorch_lightning.callbacks.LearningRateMonitor
     log_momentum: false
@@ -110,19 +111,14 @@ trainer:
   check_val_every_n_epoch: 5
   devices: 1   #make sure to look at this
   gradient_clip_algorithm: value
-  gradient_clip_val: 0.5
+  gradient_clip_val: 0.5  #originally 0.5   this is clearly not the problem
   logger:
-    _target_: pytorch_lightning.loggers.WandbLogger
-    job_type: train
-    project: velocity-generation
-    settings:
-      _save_requirements: false
-      _target_: wandb.Settings
-      start_method: fork
+    _target_: pytorch_lightning.loggers.CSVLogger   #Don't need wandb
+    save_dir: logs
   max_epochs: 2200
-  num_nodes: 1  #change to 2 for gpu
-  precision: 32
+  num_nodes: 1
+  precision: 16-mixed  #must be 16-mixed
   #strategy:
     #_target_: pytorch_lightning.strategies.ddp.DDPStrategy
     #find_unused_parameters: true
-#The strategy setcion you can use with a gpu
+#The strategy section you can use with a gpu
